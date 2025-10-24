@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI旅游规划助手</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <h1>🌍 AI旅游规划助手</h1>
+            <p>让AI为你定制专属旅游方案</p>
+        </header>
+
+        <!-- 输入表单区域 -->
+        <section class="input-section">
+            <!-- API配置状态提示 -->
+            <div class="api-status" id="apiStatus" style="display: none;">
+                <div class="status-content">
+                    <span class="status-icon">⚠️</span>
+                    <div class="status-text">
+                        <strong>API配置提醒</strong>
+                        <p>为了获得最佳体验，请确保已正确配置AI API密钥。如遇到问题，请检查网络连接和API配置。</p>
+                    </div>
+                    <button class="status-close" onclick="hideApiStatus()">×</button>
+                </div>
+            </div>
+            
+            <div class="form-container">
+                <h2>告诉我你的旅行需求</h2>
+                <form id="travelForm">
+                    <div class="form-group">
+                        <label for="destination">目的地</label>
+                        <input type="text" id="destination" name="destination" placeholder="例如：北京、上海、杭州..." required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="days">出行天数</label>
+                        <select id="days" name="days" required>
+                            <option value="">请选择</option>
+                            <option value="1">1天</option>
+                            <option value="2">2天</option>
+                            <option value="3">3天</option>
+                            <option value="4">4天</option>
+                            <option value="5">5天</option>
+                            <option value="7">7天</option>
+                            <option value="10">10天以上</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="budget">预算范围（人民币）</label>
+                        <select id="budget" name="budget" required>
+                            <option value="">请选择</option>
+                            <option value="500-1000">500-1000元</option>
+                            <option value="1000-3000">1000-3000元</option>
+                            <option value="3000-5000">3000-5000元</option>
+                            <option value="5000-10000">5000-10000元</option>
+                            <option value="10000+">10000元以上</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="interests">兴趣偏好</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="历史文化"> 历史文化
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="自然风光"> 自然风光
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="美食体验"> 美食体验
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="购物娱乐"> 购物娱乐
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="休闲度假"> 休闲度假
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="generate-btn" id="generateBtn">
+                        <span class="btn-text">🤖 生成AI旅游方案</span>
+                        <span class="loading" style="display: none;">正在生成中...</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- 结果展示区域 -->
+        <section class="result-section" id="resultSection" style="display: none;">
+            <h2>🎯 为你定制的旅游方案</h2>
+            
+            <!-- 方案概览 -->
+            <div class="plan-overview" id="planOverview">
+                <!-- 动态生成内容 -->
+            </div>
+            
+            <!-- 详细行程 -->
+            <div class="itinerary" id="itinerary">
+                <!-- 动态生成内容 -->
+            </div>
+            
+            <!-- 地图展示 -->
+            <div class="map-container">
+                <h3>📍 路线地图</h3>
+                <div id="map" class="map-placeholder">
+                    <p>🗺️ 地图加载中...</p>
+                </div>
+            </div>
+            
+            <!-- 推荐信息 -->
+            <div class="recommendations" id="recommendations">
+                <!-- 动态生成内容 -->
+            </div>
+            
+            <!-- 重新规划按钮 -->
+            <div class="action-buttons">
+                <button class="secondary-btn" onclick="resetForm()">重新规划</button>
+                <button class="primary-btn" onclick="exportPlan()">导出方案</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- 高德地图API加载器 -->
+    <script>
+        // 高德地图安全配置 - 请在高德开放平台获取你的安全密钥
+        window._AMapSecurityConfig = {
+            securityJsCode: 'fe76c69a2e0ef08233ecc93463714bc7' // 请替换为你的实际安全密钥
+        }
+    </script>
+    <script src="https://webapi.amap.com/loader.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
