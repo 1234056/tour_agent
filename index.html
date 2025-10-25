@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI旅游规划助手</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <h1>🌍 AI旅游规划助手</h1>
+            <p>让AI为你定制专属旅游方案</p>
+        </header>
+
+        <!-- 输入表单区域 -->
+        <section class="input-section">
+            <!-- API配置状态提示 -->
+            <div class="api-status" id="apiStatus" style="display: none;">
+                <div class="status-content">
+                    <span class="status-icon">⚠️</span>
+                    <div class="status-text">
+                        <strong>API配置提醒</strong>
+                        <p>为了获得最佳体验，请确保已正确配置AI API密钥。如遇到问题，请检查网络连接和API配置。</p>
+                    </div>
+                    <button class="status-close" onclick="hideApiStatus()">×</button>
+                </div>
+            </div>
+            
+            <div class="form-container">
+                <h2>告诉我你的旅行需求</h2>
+                <form id="travelForm">
+                    <div class="form-group">
+                        <label for="destination">目的地</label>
+                        <input type="text" id="destination" name="destination" placeholder="例如：北京、上海、杭州..." value="杭州" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="days">出行天数</label>
+                        <select id="days" name="days" required>
+                            <option value="">请选择</option>
+                            <option value="1">1天</option>
+                            <option value="2">2天</option>
+                            <option value="3" selected>3天</option>
+                            <option value="4">4天</option>
+                            <option value="5">5天</option>
+                            <option value="7">7天</option>
+                            <option value="10">10天以上</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="budget">预算范围（人民币）</label>
+                        <select id="budget" name="budget" required>
+                            <option value="">请选择</option>
+                            <option value="500-1000">500-1000元</option>
+                            <option value="1000-3000">1000-3000元</option>
+                            <option value="3000-5000" selected>3000-5000元</option>
+                            <option value="5000-10000">5000-10000元</option>
+                            <option value="10000+">10000元以上</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="interests">兴趣偏好</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="历史文化"> 历史文化
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="自然风光" checked> 自然风光
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="美食体验" checked> 美食体验
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="购物娱乐"> 购物娱乐
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="休闲度假"> 休闲度假
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- 新增：出行时间设置 -->
+                    <div class="form-group">
+                        <label for="travelDate">出行日期</label>
+                        <input type="date" id="travelDate" name="travelDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="departureCity">出发城市</label>
+                        <input type="text" id="departureCity" name="departureCity" placeholder="例如：北京、上海..." value="上海" required>
+                    </div>
+                    
+                    <!-- 新增：时间偏好 -->
+                    <div class="form-group">
+                        <label for="timePreference">游玩时间偏好</label>
+                        <select id="timePreference" name="timePreference">
+                            <option value="全天" selected>全天游玩</option>
+                            <option value="上午为主">上午为主</option>
+                            <option value="下午为主">下午为主</option>
+                            <option value="晚上为主">晚上为主</option>
+                            <option value="避开周末">避开周末高峰</option>
+                        </select>
+                    </div>
+                    
+                    <!-- 新增：出行方式偏好 -->
+                    <div class="form-group">
+                        <label for="transportPreference">出行方式偏好</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="transportPreference" value="步行" checked> 步行
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="transportPreference" value="公交" checked> 公共交通
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="transportPreference" value="自驾"> 自驾
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="transportPreference" value="打车"> 打车/网约车
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- 新增：人流量偏好 -->
+                    <div class="form-group">
+                        <label for="crowdPreference">人流量偏好</label>
+                        <select id="crowdPreference" name="crowdPreference">
+                            <option value="不介意">不介意人流量</option>
+                            <option value="避开高峰" selected>尽量避开人流高峰</option>
+                            <option value="小众景点">偏爱小众景点</option>
+                            <option value="热门景点">喜欢热门景点</option>
+                        </select>
+                    </div>
+                    
+                    <!-- 新增：天气偏好 -->
+                    <div class="form-group">
+                        <label for="weatherPreference">天气适应性</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="weatherPreference" value="雨天室内" checked> 雨天偏好室内活动
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="weatherPreference" value="晴天户外" checked> 晴天偏好户外活动
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="weatherPreference" value="避暑"> 炎热天气需要避暑
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="weatherPreference" value="保暖"> 寒冷天气需要保暖场所
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- 新增：携带物品 -->
+                    <div class="form-group">
+                        <label for="luggage">携带物品情况</label>
+                        <select id="luggage" name="luggage">
+                            <option value="轻装" selected>轻装出行（背包）</option>
+                            <option value="中等">中等行李（小行李箱）</option>
+                            <option value="较多">行李较多（大行李箱）</option>
+                            <option value="特殊">特殊装备（摄影器材等）</option>
+                        </select>
+                    </div>
+                    
+                    <!-- 新增：特殊需求 -->
+                    <div class="form-group">
+                        <label for="specialRequirements">特殊需求（可选）</label>
+                        <textarea id="specialRequirements" name="specialRequirements" rows="3" placeholder="例如：必须游览某个景点、指定住宿区域、无障碍设施需求等...">希望能游览西湖和灵隐寺，住宿在西湖附近</textarea>
+                    </div>
+                    
+                    <button type="submit" class="generate-btn" id="generateBtn">
+                        <span class="btn-text">🤖 生成AI旅游方案</span>
+                        <span class="loading" style="display: none;">正在生成中...</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- 结果展示区域 -->
+        <section class="result-section" id="resultSection" style="display: none;">
+            <h2>🎯 为你定制的旅游方案</h2>
+            
+            <!-- 方案概览 -->
+            <div class="plan-overview" id="planOverview">
+                <!-- 动态生成内容 -->
+            </div>
+            
+            <!-- 天气信息 -->
+            <div class="weather-info" id="weatherInfo" style="display: none;">
+                <!-- 动态生成内容 -->
+            </div>
+            
+            <!-- 人流量分析 -->
+            <div class="crowd-analysis" id="crowdAnalysis" style="display: none;">
+                <!-- 动态生成内容 -->
+            </div>
+            
+            <!-- 综合决策分析 -->
+            <div class="comprehensive-analysis" id="comprehensiveAnalysis" style="display: none;">
+                <!-- 动态生成内容 -->
+            </div>
+            
+            <!-- 详细行程 -->
+            <div class="itinerary" id="itinerary">
+                <!-- 动态生成内容 -->
+            </div>
+            
+            <!-- 地图展示 -->
+            <div class="map-container">
+                <h3>📍 路线地图</h3>
+                <div id="map" class="map-placeholder">
+                    <p>🗺️ 地图加载中...</p>
+                </div>
+            </div>
+            
+            <!-- 推荐信息 -->
+            <div class="recommendations" id="recommendations">
+                <!-- 动态生成内容 -->
+            </div>
+            
+            <!-- 重新规划按钮 -->
+            <div class="action-buttons">
+                <button class="secondary-btn" onclick="resetForm()">重新规划</button>
+                <button class="primary-btn" onclick="exportPlan()">导出方案</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- 高德地图API加载器 -->
+    <script>
+        // 高德地图安全配置 - 请在高德开放平台获取你的安全密钥
+        window._AMapSecurityConfig = {
+            securityJsCode: 'fe76c69a2e0ef08233ecc93463714bc7' // 请替换为你的实际安全密钥
+        }
+    </script>
+    <script src="https://webapi.amap.com/loader.js"></script>
+    <!-- 模块化拆分：按依赖顺序加载所有模块 -->
+    <script src="js/utils.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/weather.js"></script>
+    <script src="js/analysis.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/ui.js"></script>
+    <!-- 主逻辑脚本最后加载，复用上述模块接口 -->
+    <script src="script.js"></script>
+</body>
+</html>
